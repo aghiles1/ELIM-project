@@ -1,21 +1,24 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button} from 'react-native';
+
+import Home from './components/Home'
+import AddDiscoveryComponent from "./components/AddDiscoveryComponent";
+import {createStackNavigator} from "react-navigation";
 
 export default class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text>This is the first shroomGo page!</Text>
-      </View>
+      <RootStack/>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const RootStack = createStackNavigator({
+    Home: { screen: Home },
+    Discovery: {screen: AddDiscoveryComponent}
 });
