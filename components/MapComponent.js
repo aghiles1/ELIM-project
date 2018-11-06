@@ -21,6 +21,7 @@ export default class MapComponent extends Component {
         }).then((response)=>{console.log(response.text())})
             .catch((error) => {
                 console.error(error);
+
             });
     }
 
