@@ -18,6 +18,7 @@ export default class SigninComponent extends Component {
     }
     async goToHome(event) {
         this.props.navigation.navigate("Home");
+
     }
 
     render() {
