@@ -34,6 +34,7 @@ class AddDiscoveryComponent extends Component {
 
     async shareDiscovery(){
         if(this.state.mushroomType !== ""){
+
             let request = 'http://192.168.1.10:8080/ShroomGo/shroom/add?' + "type=" + this.state.mushroomType + "&userID=popol&longitude=" + this.state.longitude + "&latitude=" + this.state.latitude;
             fetch(request, {
                 method: 'POST',
@@ -42,9 +43,12 @@ class AddDiscoveryComponent extends Component {
                     'Content-Type': 'text/plain;charset=UTF-8',
                 },
                 body:""
-            }).then((response)=>{console.log(response.text())})
+            }).then((response)=>{
+                console.log(response.text())
+            })
               .catch((error) => {
-                console.error(error);
+                  console.log("sdsqsdsqd");
+                  console.error(error);
             });
         }
     }
