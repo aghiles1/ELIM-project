@@ -32,7 +32,7 @@ Et normalement ca donne une requete qui a cette gueule : "127.0.0.1:8080/ShroomG
 public class Main {
 
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://127.0.0.1:8080/ShroomGo/";
+    public static final String BASE_URI = "http://172.19.250.16:8080/ShroomGo/";
     private static final String PACKAGE_WS = "fr.polytech.unice.si5.webservices";
 
     /**

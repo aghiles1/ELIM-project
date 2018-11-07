@@ -45,7 +45,7 @@ export default class LoginComponent extends Component {
                 <TouchableOpacity style={styles.validContainer}
                                   onPress={this.goToHome.bind(this)}
                 >
-                    <Text style={styles.validate}>Connection</Text>
+                    <Text style={styles.validate}>Connexion</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={this.goToSign.bind(this)}

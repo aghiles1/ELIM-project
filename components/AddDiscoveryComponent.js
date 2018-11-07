@@ -35,7 +35,7 @@ class AddDiscoveryComponent extends Component {
     async shareDiscovery(){
         if(this.state.mushroomType !== ""){
 
-            let request = 'http://192.168.1.10:8080/ShroomGo/shroom/add?' + "type=" + this.state.mushroomType + "&userID=popol&longitude=" + this.state.longitude + "&latitude=" + this.state.latitude;
+            let request = 'http://172.19.250.16:8080/ShroomGo/shroom/add?' + "type=" + this.state.mushroomType + "&userID=popol&longitude=" + this.state.longitude + "&latitude=" + this.state.latitude;
             fetch(request, {
                 method: 'POST',
                 headers: {

@@ -1,34 +1,36 @@
 import React, {Component} from 'react';
-import { Button, StyleSheet, Text, Image, KeyboardAvoidingView , View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
 export default class MapComponent extends Component {
 
     constructor(props){
         super(props);
-
+        this.state = {
+            positions: ""
+        }
     }
 
-    getPositions() {
-
-        let request = 'http://192.168.1.10:8080/ShroomGo/shroom/positions';
+    componentDidMount(){
+        let request = 'http://172.19.250.16:8080/ShroomGo/shroom/positions';
         fetch(request, {
-            method: 'GET',
-            headers: {
-                Accept: 'text/plain;charset=UTF-8',
-                'Content-Type': 'text/plain;charset=UTF-8',
-            },
-            body:""
-        }).then((response)=>{console.log(response.text())})
+            method: 'GET'
+        })
+            .then((response) => response.text())
+            .then((responseText) => {
+                console.log(responseText);
+                this.setState({
+                    positions: responseText
+                })
+            })
             .catch((error) => {
                 console.error(error);
-
             });
     }
 
     render() {
         return (
             <View>
-                <Text>{this.getPositions()}</Text>
+                <Text>{this.state.positions}</Text>
             </View>
         )
     }
