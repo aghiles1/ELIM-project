@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { TouchableOpacity, StyleSheet, View, Text, TextInput } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, Text, TextInput, Alert } from 'react-native';
 
 class AddDiscoveryComponent extends Component {
 
@@ -8,7 +8,8 @@ class AddDiscoveryComponent extends Component {
         this.state = {
             latitude: 0,
             longitude: 0,
-            mushroomType: ""
+            mushroomType: "",
+            userName: this.props.navigation.getParam("userName")
         };
         this.placeholder = "Entrez le type de champignon que vous avez trouvé";
     }
@@ -34,7 +35,8 @@ class AddDiscoveryComponent extends Component {
 
     async shareDiscovery(){
         if(this.state.mushroomType !== ""){
-            let request = 'http://192.168.1.10:8080/ShroomGo/shroom/add?' + "type=" + this.state.mushroomType + "&userID=popol&longitude=" + this.state.longitude + "&latitude=" + this.state.latitude;
+
+            let request = 'http://172.19.250.16:8080/ShroomGo/shroom/add?' + "type=" + this.state.mushroomType + "&userID="+ this.state.userName + "&longitude=" + this.state.longitude + "&latitude=" + this.state.latitude;
             fetch(request, {
                 method: 'POST',
                 headers: {
@@ -42,9 +44,13 @@ class AddDiscoveryComponent extends Component {
                     'Content-Type': 'text/plain;charset=UTF-8',
                 },
                 body:""
-            }).then((response)=>{console.log(response.text())})
+            }).then((response)=>{
+                Alert.alert("","Découverte partagée avec succès")
+            })
               .catch((error) => {
-                console.error(error);
+                  Alert.alert("","Une erreu est survenue, veuillez réessayer");
+                  console.log("sdsqsdsqd");
+                  console.error(error);
             });
         }
     }
