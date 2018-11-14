@@ -9,13 +9,18 @@ export default class LoginComponent extends Component {
         this.placeholderUser = "Nom d'utilisateur";
         this.placeholderPass = "Mot de passe";
         this.placeholderColor = "rgba(255,255,255,0.6)";
+        this.state = {
+            userName: ""
+        }
     }
 
     async goToSign(event) {
         this.props.navigation.navigate("SignIn");
     }
     async goToHome(event) {
-        this.props.navigation.navigate("Home");
+        if(this.state.userName !== "") {
+            this.props.navigation.navigate("Home", {userName: this.state.userName});
+        }
     }
 
 
@@ -24,10 +29,11 @@ export default class LoginComponent extends Component {
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
                 <View style={styles.logoContainer}>
                     <Image source={logoImg} style={styles.image} />
-                    <Text style={styles.title}>Bienvenu sur l'application ShroomGo</Text>
+                    <Text style={styles.title}>Bienvenue sur l'application ShroomGo</Text>
                 </View>
                 <TextInput
                     placeholder={this.placeholderUser}
+                    onChangeText={(text) => this.setState({userName: text})}
                     style={styles.input}
                     returnKeyLabel="suivant"
                     placeholderTextColor={this.placeholderColor}

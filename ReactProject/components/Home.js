@@ -5,11 +5,18 @@ class Home extends Component {
 
     constructor(props){
         super(props);
+        this.state = {
+            userName: this.props.navigation.getParam("userName")
+        }
 
     }
 
     async goToAddDiscovery(event) {
-        this.props.navigation.navigate("Discovery");
+        this.props.navigation.navigate("Discovery", {userName: this.state.userName});
+    }
+
+    async goToDiscovery(event) {
+        this.props.navigation.navigate("Map");
     }
 
     render() {
@@ -20,6 +27,11 @@ class Home extends Component {
                     onPress={this.goToAddDiscovery.bind(this)}
                     title="Ajouter une découverte"
                 />
+                <Button
+                    onPress={this.goToDiscovery.bind(this)}
+                    title="Découvertes"
+                />
+
             </View>
         )
     }

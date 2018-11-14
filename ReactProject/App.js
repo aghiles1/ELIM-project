@@ -26,4 +26,5 @@ const RootStack = createStackNavigator({
     Home: { screen: Home },
     Discovery: {screen: AddDiscoveryComponent},
     SignIn: {screen: SigninComponent },
+    Map: {screen: MapComponent}
 });
