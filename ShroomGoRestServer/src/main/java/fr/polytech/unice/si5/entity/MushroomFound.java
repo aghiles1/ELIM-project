@@ -4,11 +4,13 @@ public class MushroomFound {
     private MushroomType type;
     private Position position;
     private String userID;
+    private int degradation;
 
-    public MushroomFound(MushroomType type, Position position, String userID) {
+    public MushroomFound(MushroomType type, Position position, String userID, int degradation) {
         this.type = type;
         this.position = position;
         this.userID = userID;
+        this.degradation = degradation;
     }
 
     public MushroomType getType() {
@@ -35,6 +37,13 @@ public class MushroomFound {
         this.userID = userID;
     }
 
+    public int getDegradation() {
+        return degradation;
+    }
+
+    public void setDegradation(int degradation) {
+        this.degradation = degradation;
+    }
     @Override
     public String toString() {
         return type.toString() + "-" + position.toString() + "-" + userID;
