@@ -7,41 +7,30 @@ import fr.polytech.unice.si5.entity.Position;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("shroom")
 public class Mushroom {
 
-    private MockedDB mockedDB = MockedDB.mockedDB;
+    private MockedDB mockedDB = MockedDB.getInstance();
 
     @POST
     @Path("/add")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response addMushroom(@QueryParam("type") String type,@QueryParam("userID") String userID,@QueryParam("longitude") String longitude,@QueryParam("latitude") String latitude){
+    public String addMushroom(@QueryParam("type") String type,@QueryParam("userID") String userID,@QueryParam("longitude") String longitude,@QueryParam("latitude") String latitude,@QueryParam("degradation") int degradation){
         System.out.println("Someone try to add a new position");
         Position p = new Position(Float.valueOf(longitude),Float.valueOf(latitude));
-        MushroomFound mf = new MushroomFound(MushroomType.valueOf(type),p,userID);
-        boolean operation = mockedDB.addMushroom(mf);
-        if(operation){
-            return Response.status(Response.Status.ACCEPTED).build();
-        }
-        else{
-            return Response.status(Response.Status.CONFLICT).build();
-        }
+        MushroomFound mf = new MushroomFound(MushroomType.valueOf(type),p,userID,degradation);
+        mockedDB.addMushroom(mf);
+        return "ok";
     }
 
     @GET
     @Path("/positions")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getMushroomPositions(){
-        String response = mockedDB.getMushrooms();
-        if(response == ""){
-            return "Empty";
-        }
-        else return response;
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<MushroomFound> getMushroomPositions(){
+        return mockedDB.getMushroomsPos();
         //return Response.ok().entity(mockedDB.getMushrooms()).build();
     }
-
-
 }
 

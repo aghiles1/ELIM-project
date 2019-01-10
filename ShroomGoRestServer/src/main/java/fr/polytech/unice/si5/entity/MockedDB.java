@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MockedDB {
+    public static MockedDB mockedDB;
     private static MockedDB ourInstance = new MockedDB();
     public static MockedDB getInstance() {
         return ourInstance;
@@ -21,7 +22,7 @@ public class MockedDB {
     }
 
     public void addFakePos() {
-        addMushroom(new MushroomFound(MushroomType.valueOf("Bolet"),new Position(3.14f,3.15f),"ragnaviel",1));
+        addMushroom(new MushroomFound(MushroomType.valueOf("Bolet"),new Position(7.08015462f,43.61507822f),"ragnaviel",1));
         addMushroom(new MushroomFound(MushroomType.valueOf("Bolet"),new Position(3.14f,3.15f),"bibix44",3));
         addMushroom(new MushroomFound(MushroomType.valueOf("Bolet"),new Position(3.14f,3.15f),"bibix44",5));
         addMushroom(new MushroomFound(MushroomType.valueOf("Bolet"),new Position(3.14f,3.15f),"bibix44",2));
