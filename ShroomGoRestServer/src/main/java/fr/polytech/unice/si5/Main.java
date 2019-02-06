@@ -1,11 +1,16 @@
 package fr.polytech.unice.si5;
 
+import fr.polytech.unice.si5.entity.DBHelper;
+import fr.polytech.unice.si5.entity.MushroomFound;
+import fr.polytech.unice.si5.entity.MushroomType;
+import fr.polytech.unice.si5.entity.Position;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
 import java.net.URI;
+import java.sql.SQLException;
 
 /*
 A l'attention de Pierre Bonny(profitiez bien des fautes mon chère)
@@ -57,6 +62,14 @@ public class Main {
     public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at %sapplication.wadl\nHit enter to stop it...", BASE_URI));
+        /*DBHelper db = new DBHelper();
+        db.addPosition(new MushroomFound(MushroomType.valueOf("Bolet"),new Position(3.14f,3.13245f),3));
+        try {
+            System.out.println(db.getMushroomsPos().toString());
+            System.out.println(db.getUserID("Ken"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
         System.in.read();
         server.shutdown();
     }

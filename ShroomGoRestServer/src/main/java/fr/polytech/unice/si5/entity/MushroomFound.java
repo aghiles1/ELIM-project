@@ -3,14 +3,13 @@ package fr.polytech.unice.si5.entity;
 public class MushroomFound {
     private MushroomType type;
     private Position position;
-    private String userID;
+    private int userID;
     private int degradation;
 
-    public MushroomFound(MushroomType type, Position position, String userID, int degradation) {
+    public MushroomFound(MushroomType type, Position position, int userID) {
         this.type = type;
         this.position = position;
         this.userID = userID;
-        this.degradation = degradation;
     }
 
     public MushroomType getType() {
@@ -29,11 +28,11 @@ public class MushroomFound {
         this.position = position;
     }
 
-    public String getUserID() {
+    public int getUserID() {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    public void setUserID(int userID) {
         this.userID = userID;
     }
 
@@ -44,6 +43,7 @@ public class MushroomFound {
     public void setDegradation(int degradation) {
         this.degradation = degradation;
     }
+
     @Override
     public String toString() {
         return type.toString() + "-" + position.toString() + "-" + userID;

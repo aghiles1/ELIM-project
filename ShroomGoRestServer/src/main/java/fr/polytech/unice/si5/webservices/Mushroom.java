@@ -1,27 +1,24 @@
 package fr.polytech.unice.si5.webservices;
 
-import fr.polytech.unice.si5.entity.MockedDB;
-import fr.polytech.unice.si5.entity.MushroomFound;
-import fr.polytech.unice.si5.entity.MushroomType;
-import fr.polytech.unice.si5.entity.Position;
+import fr.polytech.unice.si5.entity.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.SQLException;
 import java.util.List;
 
 @Path("shroom")
 public class Mushroom {
-
-    private MockedDB mockedDB = MockedDB.getInstance();
+    private DBHelper dbh = new DBHelper();
 
     @POST
     @Path("/add")
     @Produces(MediaType.TEXT_PLAIN)
-    public String addMushroom(@QueryParam("type") String type,@QueryParam("userID") String userID,@QueryParam("longitude") String longitude,@QueryParam("latitude") String latitude,@QueryParam("degradation") int degradation){
-        System.out.println("Someone try to add a new position");
+    public String addMushroom(@QueryParam("type") String type,@QueryParam("userID") int userID,@QueryParam("longitude") String longitude,@QueryParam("latitude") String latitude){
+        System.out.println("Someone want to add a new position");
         Position p = new Position(Float.valueOf(longitude),Float.valueOf(latitude));
-        MushroomFound mf = new MushroomFound(MushroomType.valueOf(type),p,userID,degradation);
-        mockedDB.addMushroom(mf);
+        MushroomFound mf = new MushroomFound(MushroomType.valueOf(type),p,userID);
+        dbh.addPosition(mf);
         return "ok";
     }
 
@@ -29,8 +26,39 @@ public class Mushroom {
     @Path("/positions")
     @Produces(MediaType.APPLICATION_JSON)
     public List<MushroomFound> getMushroomPositions(){
-        return mockedDB.getMushroomsPos();
-        //return Response.ok().entity(mockedDB.getMushrooms()).build();
+        System.out.println("Someone want the list of all position");
+        try {
+            return dbh.getMushroomsPos();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
+    @GET
+    @Path("/connexion")
+    @Produces(MediaType.APPLICATION_JSON)
+    public int getUserId(@QueryParam("userName") String userName){
+        System.out.println("Someone want to get the id of user: " + userName);
+        try {
+            return dbh.getUserID(userName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    @GET
+    @Path("/position")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<MushroomFound> getMushroomPosition(@QueryParam("centerLong") String centerLong,@QueryParam("centerLat") String centerLat){
+        try {
+            return dbh.getMushroomsPos();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
 
