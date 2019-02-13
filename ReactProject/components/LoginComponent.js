@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, StyleSheet, Text, Image, KeyboardAvoidingView, View, TextInput, TouchableOpacity} from 'react-native';
 import logoImg from '../assets/shroomGo.png';
+const IPAdress = require("../utils/ipAdress");
 
 export default class LoginComponent extends Component {
 
@@ -18,8 +19,24 @@ export default class LoginComponent extends Component {
         this.props.navigation.navigate("SignIn");
     }
     async goToHome(event) {
+        console.log("userName: ", this.state.userName);
         if(this.state.userName !== "") {
-            this.props.navigation.navigate("Home", {userName: this.state.userName});
+            let request = 'http://' + IPAdress.ipAdress + ':8080/ShroomGo/shroom/connexion?' + "userName="+ this.state.userName;
+            console.log("request ", request);
+            fetch(request, {
+                method: 'GET'
+            }).then((response)=>{
+                return response.json()
+            })
+            .then((resJson)=> {
+                console.log(resJson);
+                this.props.navigation.navigate("Home", {userId: resJson});
+            })
+            .catch((error) => {
+                Alert.alert("","Une erreur est survenue, veuillez réessayer");
+                console.log("sdsqsdsqd");
+                console.error(error);
+            });
         }
     }
 
