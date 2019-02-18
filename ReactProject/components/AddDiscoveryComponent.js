@@ -1,42 +1,51 @@
 import React, {Component} from 'react';
-import { TouchableOpacity, StyleSheet, View, Text, TextInput, Alert } from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import MultiSelect from 'react-native-multiple-select';
+const IPAdress = require("../utils/ipAdress");
 
-class AddDiscoveryComponent extends Component {
+export default class AddDiscoveryComponent extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
+            selectedMushroomType: [],
+            availableMushroomTypes: [{id:"0", name: "Morille"}, {id:"1", name: "Bolet"}, {id:"2", name: "Cepe"}, {id:"3", name: "Chanterelle"}],
+            userId: this.props.navigation.getParam("userId"),
             latitude: 0,
-            longitude: 0,
-            mushroomType: "",
-            userName: this.props.navigation.getParam("userName")
-        };
-        this.placeholder = "Entrez le type de champignon que vous avez trouvé";
+            longitude: 0
+        }
+    }
+
+    onSelectedItemsChange(newType) {
+        console.log("newType: ", newType);
+        this.setState({selectedMushroomType: newType});
     }
 
     componentDidMount() {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-
                 const lat = parseFloat(position.coords.latitude);
                 const long = parseFloat(position.coords.longitude);
 
                 this.setState({
                     latitude: lat,
                     longitude: long
-                });
-                console.log(this.state.latitude);
-                console.log(this.state.longitude);
+                })
             },
-            (error) => console.log(error),
+            (error) => {
+                this.setState({error: error.message});
+                alert(error.message)
+            },
             {enableHighAccuracy: true, maximumAge: 0, distanceFilter: 1},
         );
     }
 
-    async shareDiscovery(){
-        if(this.state.mushroomType !== ""){
-
-            let request = 'http://172.19.250.16:8080/ShroomGo/shroom/add?' + "type=" + this.state.mushroomType + "&userID="+ this.state.userName + "&longitude=" + this.state.longitude + "&latitude=" + this.state.latitude;
+    shareDiscovery(){
+        if(this.state.selectedMushroomType !== ""){
+            console.log("id ", this.state.userId);
+            console.log("qsdd ", this.state.availableMushroomTypes[this.state.selectedMushroomType[0]].name);
+            let request = 'http:' + IPAdress.ipAdress + ':8080/ShroomGo/shroom/add?' + "type=" + this.state.availableMushroomTypes[this.state.selectedMushroomType[0]].name + "&userID="+ this.state.userId + "&longitude=" + this.state.longitude + "&latitude=" + this.state.latitude;
+            console.log("request ", request);
             fetch(request, {
                 method: 'POST',
                 headers: {
@@ -45,40 +54,60 @@ class AddDiscoveryComponent extends Component {
                 },
                 body:""
             }).then((response)=>{
+                console.log("dsdasd ", response);
                 Alert.alert("","Découverte partagée avec succès")
             })
-              .catch((error) => {
-                  Alert.alert("","Une erreu est survenue, veuillez réessayer");
-                  console.log("sdsqsdsqd");
-                  console.error(error);
+            .catch((error) => {
+                Alert.alert("","Une erreur est survenue, veuillez réessayer");
+                console.error(error);
             });
         }
     }
 
     render() {
         return (
-            <View behavior="padding" enabled>
-                <Text style={styles.texts}>Vos coordonnées actuelles :</Text>
-                <Text style={styles.texts}>Latitude : {this.state.latitude}, Longitude : {this.state.longitude}</Text>
-                <TextInput style={styles.textInput} onChangeText={(text) => this.setState({mushroomType: text})} placeholder={this.placeholder}/>
+            <View style={styles.mainView}>
+                <Text style={styles.texts}>Partager ma découverte</Text>
+                <MultiSelect
+                    style={styles.picker1}
+                    single
+                    items={this.state.availableMushroomTypes}
+                    uniqueKey="id"
+                    onSelectedItemsChange={this.onSelectedItemsChange.bind(this)}
+                    selectedItems={this.state.selectedMushroomType}
+                    selectText="Pick Items"
+                    searchInputPlaceholderText="Search Items..."
+                    tagRemoveIconColor="green"
+                    tagBorderColor="green"
+                    tagTextColor="green"
+                    selectedItemTextColor="green"
+                    selectedItemIconColor="green"
+                    itemTextColor="green"
+                    displayKey="name"
+                    searchInputStyle={{ color: 'green' }}
+                    itemStyle={{backgroundColor: 'rgba(255,255,255,0.2)'}}
+                    submitButtonColor="green"
+                    submitButtonText="Choisir"
+                />
                 <TouchableOpacity style={styles.but} onPress={this.shareDiscovery.bind(this)}>
                     <Text style={styles.textStyle}>Partager la découverte</Text>
                 </TouchableOpacity>
             </View>
         )
-    }
+    };
 }
-export default AddDiscoveryComponent;
+
 const styles = StyleSheet.create({
-    textInput: {
-        height: 40,
-        marginTop: 10,
-        marginLeft: 10,
-        marginRight: 10
-    },
     texts: {
-        marginTop: 10,
-        marginLeft: 10
+        marginBottom: 20,
+        marginTop: 10
+    },
+    mainView: {
+      backgroundColor: "#3498db",
+      flex: 1,
+      flexDirection: "column",
+      paddingLeft: 10,
+      paddingRight: 10
     },
     textStyle: {
         fontSize:15,
@@ -93,5 +122,9 @@ const styles = StyleSheet.create({
         marginRight: "20%",
         borderRadius: 3,
         elevation: 5
+    },
+    picker1: {
+        marginTop: 50,
+        paddingTop: 50
     }
 });

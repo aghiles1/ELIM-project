@@ -14,7 +14,7 @@ public class DBHelper {
             // This will load the MySQL driver, each DB has its own driver
             //Class.forName("com.mysql.jdbc.Driver");
             // Setup the connection with the DB
-            connect = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/mydb?user=root&password=root&useLegacyDatetimeCode=false&serverTimezone=UTC");
+            connect = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/mydb?user=root&password=asmpedro&useLegacyDatetimeCode=false&serverTimezone=UTC");
         }
         catch (Exception e){
             System.out.println(e);
