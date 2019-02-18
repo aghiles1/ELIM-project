@@ -46,6 +46,6 @@ public class MushroomFound {
 
     @Override
     public String toString() {
-        return type.toString() + "-" + position.toString() + "-" + userID;
+        return type.toString() + "-" + position.toString() + "-" + userID + "-" + degradation;
     }
 }

@@ -16,8 +16,9 @@ public class Mushroom {
     @Produces(MediaType.TEXT_PLAIN)
     public String addMushroom(@QueryParam("type") String type,@QueryParam("userID") int userID,@QueryParam("longitude") String longitude,@QueryParam("latitude") String latitude){
         System.out.println("Someone want to add a new position");
-        Position p = new Position(Float.valueOf(longitude),Float.valueOf(latitude));
+        Position p = new Position(Double.valueOf(longitude),Double.valueOf(latitude));
         MushroomFound mf = new MushroomFound(MushroomType.valueOf(type),p,userID);
+        System.out.println(mf.toString());
         dbh.addPosition(mf);
         return "ok";
     }
@@ -51,9 +52,9 @@ public class Mushroom {
     @GET
     @Path("/position")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<MushroomFound> getMushroomPosition(@QueryParam("centerLong") String centerLong,@QueryParam("centerLat") String centerLat){
+    public List<MushroomFound> getMushroomPosition(@QueryParam("centerLong") String centerLong,@QueryParam("centerLat") String centerLat,@QueryParam("size") String size, @QueryParam("userID") int userID,@FormParam("array") List<String> array){
         try {
-            return dbh.getMushroomsPos();
+            return dbh.getMushroomsPosSHared(centerLong,centerLat,size,userID,array);
         } catch (SQLException e) {
             e.printStackTrace();
         }

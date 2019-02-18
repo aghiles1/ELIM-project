@@ -1,8 +1,6 @@
 package fr.polytech.unice.si5;
 
 import fr.polytech.unice.si5.entity.DBHelper;
-import fr.polytech.unice.si5.entity.MushroomFound;
-import fr.polytech.unice.si5.entity.MushroomType;
 import fr.polytech.unice.si5.entity.Position;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -37,7 +35,7 @@ Et normalement ca donne une requete qui a cette gueule : "127.0.0.1:8080/ShroomG
 public class Main {
 
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://10.212.104.223:8080/ShroomGo/";
+    public static final String BASE_URI = "http://localhost:8080/ShroomGo/";
     private static final String PACKAGE_WS = "fr.polytech.unice.si5.webservices";
 
     /**
@@ -63,10 +61,10 @@ public class Main {
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at %sapplication.wadl\nHit enter to stop it...", BASE_URI));
         /*DBHelper db = new DBHelper();
-        db.addPosition(new MushroomFound(MushroomType.valueOf("Bolet"),new Position(3.14f,3.13245f),3));
+        //db.addPosition(new MushroomFound(MushroomType.valueOf("Bolet"),new Position(3.14f,3.13245f),3));
         try {
-            System.out.println(db.getMushroomsPos().toString());
-            System.out.println(db.getUserID("Ken"));
+            System.out.println(db.getMushroomsPosSHared("7.067904472351074","43.61653137207031","0.3",4));
+            //System.out.println(db.distanceInKmBetweenEarthCoordinates(new Position(7.067904472351074,43.61653137207031),new Position(7.068390369415283,43.618778228759766)));
         } catch (SQLException e) {
             e.printStackTrace();
         }*/
