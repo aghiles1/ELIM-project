@@ -68,7 +68,7 @@ public class Main {
         System.out.println(String.format("Jersey app started with WADL available at %sapplication.wadl\nHit enter to stop it...", BASE_URI));
         /*DBHelper db = new DBHelper();
         try {
-            System.out.println(db.getMushroomsPosSHared("7.067904472351074","43.61653137207031","0.3",4,MushroomType.names()));
+            System.out.println(db.getMushroomsPosSHared("43.71751987","6.8094635","25",2,MushroomType.names()).size());
         } catch (SQLException e) {
             e.printStackTrace();
         }*/

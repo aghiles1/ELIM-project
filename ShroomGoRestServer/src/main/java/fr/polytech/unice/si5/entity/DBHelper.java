@@ -52,16 +52,19 @@ public class DBHelper {
 
         for (MushroomFound mushroom: lst) {
             Double distance = distanceInKmBetweenEarthCoordinates(center,mushroom.getPosition());
-            System.out.println(distance);
             if(distance < radius && array.contains(mushroom.getType().toString()))
                 res.add(mushroom);
         }
 
         resultSet = statement.executeQuery("select * from mushroompos where userid = " + userID + " ;");
         lst = resultSetToList(resultSet);
-        System.out.println(lst);
 
-        res.addAll(lst);
+        for (MushroomFound mushroom: lst) {
+            Double distance = distanceInKmBetweenEarthCoordinates(center,mushroom.getPosition());
+            if(distance < radius && array.contains(mushroom.getType().toString()))
+                res.add(mushroom);
+        }
+
         return res;
     }
 
