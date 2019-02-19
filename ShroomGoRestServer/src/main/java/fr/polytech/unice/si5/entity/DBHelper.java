@@ -14,7 +14,7 @@ public class DBHelper {
             // This will load the MySQL driver, each DB has its own driver
             //Class.forName("com.mysql.jdbc.Driver");
             // Setup the connection with the DB
-            connect = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/mydb?user=root&password=asmpedro&useLegacyDatetimeCode=false&serverTimezone=UTC");
+            connect = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/mydb?user=root&password=root&useLegacyDatetimeCode=false&serverTimezone=UTC");
         }
         catch (Exception e){
             System.out.println(e);
@@ -56,6 +56,12 @@ public class DBHelper {
             if(distance < radius && array.contains(mushroom.getType().toString()))
                 res.add(mushroom);
         }
+
+        resultSet = statement.executeQuery("select * from mushroompos where userid = " + userID + " ;");
+        lst = resultSetToList(resultSet);
+        System.out.println(lst);
+
+        res.addAll(lst);
         return res;
     }
 
@@ -67,7 +73,10 @@ public class DBHelper {
             Double latitude = resultSet.getDouble("latitude");
             int userid = resultSet.getInt("userid");
             String type = resultSet.getString("type");
-            res.add(new MushroomFound(MushroomType.valueOf(type),new Position(longitude,latitude),userid));
+
+            MushroomFound mush = new MushroomFound(MushroomType.valueOf(type),new Position(longitude,latitude),userid);
+            mush.setDegradation(0);
+            res.add(mush);
         }
         return res;
     }

@@ -1,6 +1,7 @@
 package fr.polytech.unice.si5;
 
 import fr.polytech.unice.si5.entity.DBHelper;
+import fr.polytech.unice.si5.entity.MushroomType;
 import fr.polytech.unice.si5.entity.Position;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -9,6 +10,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 /*
 A l'attention de Pierre Bonny(profitiez bien des fautes mon chère)
@@ -52,6 +54,10 @@ public class Main {
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 
+    public static String[] getNames(Class<? extends Enum<?>> e) {
+        return Arrays.stream(e.getEnumConstants()).map(Enum::name).toArray(String[]::new);
+    }
+
     /**
      * Main method.
      * @param args
@@ -61,10 +67,8 @@ public class Main {
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at %sapplication.wadl\nHit enter to stop it...", BASE_URI));
         /*DBHelper db = new DBHelper();
-        //db.addPosition(new MushroomFound(MushroomType.valueOf("Bolet"),new Position(3.14f,3.13245f),3));
         try {
-            System.out.println(db.getMushroomsPosSHared("7.067904472351074","43.61653137207031","0.3",4));
-            //System.out.println(db.distanceInKmBetweenEarthCoordinates(new Position(7.067904472351074,43.61653137207031),new Position(7.068390369415283,43.618778228759766)));
+            System.out.println(db.getMushroomsPosSHared("7.067904472351074","43.61653137207031","0.3",4,MushroomType.names()));
         } catch (SQLException e) {
             e.printStackTrace();
         }*/
