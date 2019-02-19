@@ -36,6 +36,7 @@ export default class MapComponent extends Component {
         this.updateZoneRadius = this.updateZoneRadius.bind(this);
         this.updateMushroomType = this.updateMushroomType.bind(this);
         this.setColors = this.setColors.bind(this);
+        this.showType = this.showType.bind(this);
     }
 
     componentDidMount(){
@@ -62,7 +63,6 @@ export default class MapComponent extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson);
                 let colors = this.setColors(responseJson);
                 this.setState({
                     items: this.getTypesItems(colors),
@@ -101,13 +101,12 @@ export default class MapComponent extends Component {
 
     getZones(){
         let request = 'http://' + IPAdress.ipAdress +':8080/ShroomGo/shroom/position?'+"centerLat="+this.state.initialPosition.latitude+"&centerLong="+this.state.initialPosition.longitude+"&size="+this.state.zoneRadius + "&userID="+this.state.userId + this.generateShroomTypesArray();
-        console.log("request ", request);
+        console.log(request);
         fetch(request, {
             method: 'GET'
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson);
                 let colors = this.setColors(responseJson);
                 this.setState({
                     positions: responseJson,
@@ -121,14 +120,19 @@ export default class MapComponent extends Component {
     }
 
     generateShroomTypesArray() {
-        if(this.state.selectedMushroomTypes.length === 0 || (this.state.selectedMushroomTypes.length === 1 & this.state.items[0].name === "tous les champignons")) {
-            return "&shroomTypes=all"
+        if(this.state.selectedMushroomTypes.length === 0 || (this.state.selectedMushroomTypes.length === 1 & this.state.items[this.state.selectedMushroomTypes[0]].name === "tous les champignons")) {
+            let result = "";
+            for(let i = 0; i < this.state.items.length; i++) {
+                if(this.state.items[i].name !== "tous les champignons"){
+                    result += "&array=" + this.formatName(this.state.items[i].name);
+                }
+            }
+            return result
         }
         else {
             let result = "";
-            for(let shroomType in this.state.selectedMushroomTypes) {
-                console.log("shroomType " + shroomType);
-                result += "&array=" + this.formatName(this.state.items[shroomType].name);
+            for(let i = 0; i < this.state.selectedMushroomTypes.length; i++) {
+                result += "&array=" + this.formatName(this.state.items[this.state.selectedMushroomTypes[i]].name);
             }
             return result;
         }
@@ -174,16 +178,9 @@ export default class MapComponent extends Component {
         return result
     }
 
-    changeRegion(event){
-        let newPosition = event.nativeEvent.coordinate;
-        this.setState({
-            initialPosition: {
-                latitude: newPosition.latitude,
-                longitude: newPosition.longitude,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA
-            }
-        })
+    showType(type) {
+        console.log(type);
+        Alert.alert(type);
     }
 
     render() {
@@ -195,12 +192,20 @@ export default class MapComponent extends Component {
                 <View style={styles.mapContainer}>
                     <MapView
                         style={styles.map}
-                        region={this.state.initialPosition}
-                        onPress={(event) => this.changeRegion(event)}>
+                        region={this.state.initialPosition}>
                         {this.state.positions !== "" ? (this.state.positions.map((pos, index) =>
                             <MapCircle key={index} center={{latitude: pos.position.latitude, longitude: pos.position.longitude}} radius={pos.degradation ? pos.degradation * 1000 : 500} strokeColor={this.state.colors.get(pos.type.toLowerCase()).darkColor} strokeWidth={1} fillColor={this.state.colors.get(pos.type.toLowerCase()).lightColor} zIndex={4}/>
                         )): null}
+                        {this.state.positions !== "" ? (this.state.positions.map((pos, index) =>
+                            <MapView.Marker
+                                pinColor={"blue"}
+                                title="Zone"
+                                key={index}
+                                coordinate={pos.position}>
+                            </MapView.Marker>
+                        )): null}
                         <MapView.Marker
+                            pinColor={"red"}
                             title="Position actuelle"
                             coordinate={this.state.initialPosition}>
                         </MapView.Marker>
