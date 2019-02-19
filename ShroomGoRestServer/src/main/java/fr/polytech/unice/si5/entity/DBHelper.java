@@ -64,13 +64,12 @@ public class DBHelper {
             if(distance < radius && array.contains(mushroom.getType().toString()))
                 res.add(mushroom);
         }
-
         return res;
     }
 
     private List<MushroomFound> resultSetToList(ResultSet resultSet) throws SQLException {
         List<MushroomFound> res = new ArrayList<>();
-        while (resultSet.next()) {
+        while (resultSet.next()){
             int user = resultSet.getInt("id");
             Double longitude = resultSet.getDouble("longitude");
             Double latitude = resultSet.getDouble("latitude");
@@ -109,11 +108,21 @@ public class DBHelper {
         return resultSet.getInt("iduser");
     }
 
+    public List<User> getUsers() throws SQLException{
+        Statement statement = connect.createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from mydb.user");
+        List<User> res = new ArrayList<>();
+        while (resultSet.next()) {
+            res.add(new User(resultSet.getString("username"),String.valueOf(resultSet.getInt("iduser"))));
+        }
+        return res;
+    }
+
     public double degreesToRadians(Double degrees) {
         return degrees * Math.PI / 180;
     }
 
-    public double distanceInKmBetweenEarthCoordinates(Position pos1, Position pos2) {
+    public double distanceInKmBetweenEarthCoordinates(Position pos1, Position pos2){
         int earthRadiusKm = 6371;
 
         double dLat = degreesToRadians(pos2.getLatitude()-pos1.getLatitude());
@@ -127,4 +136,7 @@ public class DBHelper {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return earthRadiusKm * c;
     }
+
+    //public void sharePosition()
+
 }
