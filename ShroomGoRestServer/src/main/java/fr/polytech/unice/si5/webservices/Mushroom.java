@@ -14,12 +14,12 @@ public class Mushroom {
     @POST
     @Path("/add")
     @Produces(MediaType.TEXT_PLAIN)
-    public String addMushroom(@QueryParam("type") String type,@QueryParam("userID") int userID,@QueryParam("longitude") String longitude,@QueryParam("latitude") String latitude){
+    public String addMushroom(@QueryParam("type") String type,@QueryParam("userID") int userID,@QueryParam("longitude") String longitude,@QueryParam("latitude") String latitude,@QueryParam("users") List<String> users) throws SQLException {
         System.out.println("Someone want to add a new position");
         Position p = new Position(Double.valueOf(longitude),Double.valueOf(latitude));
         MushroomFound mf = new MushroomFound(MushroomType.valueOf(type),p,userID);
-        System.out.println(mf.toString());
-        dbh.addPosition(mf);
+        int idPos = dbh.addPosition(mf);
+        dbh.sharePosition(userID,idPos,users);
         return "ok";
     }
 

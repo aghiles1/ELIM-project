@@ -1,6 +1,7 @@
 package fr.polytech.unice.si5;
 
 import fr.polytech.unice.si5.entity.DBHelper;
+import fr.polytech.unice.si5.entity.MushroomFound;
 import fr.polytech.unice.si5.entity.MushroomType;
 import fr.polytech.unice.si5.entity.Position;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -10,7 +11,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /*
 A l'attention de Pierre Bonny(profitiez bien des fautes mon chère)
@@ -37,7 +40,7 @@ Et normalement ca donne une requete qui a cette gueule : "127.0.0.1:8080/ShroomG
 public class Main {
 
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://localhost:8080/ShroomGo/";
+    public static final String BASE_URI = "http://192.168.43.136:8080/ShroomGo/";
     private static final String PACKAGE_WS = "fr.polytech.unice.si5.webservices";
 
     /**
@@ -68,8 +71,13 @@ public class Main {
         System.out.println(String.format("Jersey app started with WADL available at %sapplication.wadl\nHit enter to stop it...", BASE_URI));
         DBHelper db = new DBHelper();
         try {
-            System.out.println(db.getMushroomsPosSHared("43.71751987","6.8094635","25",2,MushroomType.names()).size());
-            System.out.println(db.getUsers());
+            //System.out.println(db.getMushroomsPosSHared("43.71751987","6.8094635","25",2,MushroomType.names()).size());
+            //System.out.println(db.getUsers());
+            List<String> lst = new ArrayList<>();
+            lst.add("3");
+            lst.add("4");
+            int res = db.addPosition(new MushroomFound(MushroomType.Cepe,new Position(43.71751987,6.8094635),1));
+            db.sharePosition(2,res,lst);
         } catch (SQLException e) {
             e.printStackTrace();
         }

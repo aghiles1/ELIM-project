@@ -21,16 +21,27 @@ public class DBHelper {
         }
     }
 
-    public void addPosition(MushroomFound mf){
+    public int addPosition(MushroomFound mf){
         try {
             Statement statement = connect.createStatement();
             String value = "VALUES (" + mf.getPosition().getLongitude() + "," + mf.getPosition().getLatitude() +
                     "," + mf.getUserID() + ",'" + mf.getType() + "')";
             String query = "INSERT INTO mushroomPos (longitude, latitude, userid, type) " + value ;
-            //System.out.println(query);
             statement.executeUpdate(query);
+            ResultSet resultSet = statement.executeQuery( "select * from mydb.mushroompos ORDER BY id DESC LIMIT 1");
+            resultSet.next();
+            return resultSet.getInt("id");
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void sharePosition(int sharer, int posId,List<String> receivers) throws SQLException {
+        Statement statement = connect.createStatement();
+        for (String id: receivers) {
+            String query = "INSERT INTO shared values ("+ sharer +","+ id +","+ posId+", 1);";
+            statement.executeUpdate(query);
         }
     }
 
