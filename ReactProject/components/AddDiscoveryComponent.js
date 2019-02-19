@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
 import MultiSelect from 'react-native-multiple-select';
 const IPAdress = require("../utils/ipAdress");
 
@@ -42,19 +42,16 @@ export default class AddDiscoveryComponent extends Component {
 
     shareDiscovery(){
         if(this.state.selectedMushroomType !== ""){
-            console.log("id ", this.state.userId);
-            console.log("qsdd ", this.state.availableMushroomTypes[this.state.selectedMushroomType[0]].name);
             let request = 'http:' + IPAdress.ipAdress + ':8080/ShroomGo/shroom/add?' + "type=" + this.state.availableMushroomTypes[this.state.selectedMushroomType[0]].name + "&userID="+ this.state.userId + "&longitude=" + this.state.longitude + "&latitude=" + this.state.latitude;
-            console.log("request ", request);
             fetch(request, {
                 method: 'POST',
                 headers: {
                     Accept: 'text/plain;charset=UTF-8',
                     'Content-Type': 'text/plain;charset=UTF-8',
                 },
-                body:""
-            }).then((response)=>{
-                console.log("dsdasd ", response);
+                body: ""
+            })
+            .then((response)=>{
                 Alert.alert("","Découverte partagée avec succès")
             })
             .catch((error) => {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Dimensions, ScrollView, Picker, Button} from 'react-native';
+import {StyleSheet, Text, View, Dimensions, ScrollView, Picker, Button, Alert} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import MapCircle from "react-native-maps/lib/components/MapCircle";
 import MultiSelect from 'react-native-multiple-select';
@@ -28,6 +28,7 @@ export default class MapComponent extends Component {
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA
             },
+            userId: this.props.navigation.getParam("userId"),
             items: [],
             zoneRadius: 1,
             selectedMushroomTypes: []
@@ -64,10 +65,8 @@ export default class MapComponent extends Component {
                 console.log(responseJson);
                 let colors = this.setColors(responseJson);
                 this.setState({
-                    positions: responseJson,
-                    colors: colors,
                     items: this.getTypesItems(colors),
-                    selectedMushroomTypes: [colors.size - 1]
+                    selectedMushroomTypes: [(colors.size - 1).toString()]
                 });
             })
             .catch((error) => {
@@ -101,23 +100,42 @@ export default class MapComponent extends Component {
 
 
     getZones(){
-        let request = 'http://' + IPAdress.ipAdress +':8080/ShroomGo/shroom/positions?'+"latitude="+this.state.initialPosition+"&";
+        let request = 'http://' + IPAdress.ipAdress +':8080/ShroomGo/shroom/position?'+"centerLat="+this.state.initialPosition.latitude+"&centerLong="+this.state.initialPosition.longitude+"&size="+this.state.zoneRadius + "&userID="+this.state.userId + this.generateShroomTypesArray();
+        console.log("request ", request);
         fetch(request, {
             method: 'GET'
         })
             .then((response) => response.json())
             .then((responseJson) => {
+                console.log(responseJson);
                 let colors = this.setColors(responseJson);
                 this.setState({
                     positions: responseJson,
                     colors: colors,
-                    items: this.getTypesItems(colors),
-                    selectedMushroomTypes: [colors.size - 1]
+                    items: this.getTypesItems(colors)
                 });
             })
             .catch((error) => {
                 console.error(error);
             });
+    }
+
+    generateShroomTypesArray() {
+        if(this.state.selectedMushroomTypes.length === 0 || (this.state.selectedMushroomTypes.length === 1 & this.state.items[0].name === "tous les champignons")) {
+            return "&shroomTypes=all"
+        }
+        else {
+            let result = "";
+            for(let shroomType in this.state.selectedMushroomTypes) {
+                console.log("shroomType " + shroomType);
+                result += "&array=" + this.formatName(this.state.items[shroomType].name);
+            }
+            return result;
+        }
+    }
+
+    formatName(name) {
+        return name[0].toUpperCase() + name.substring(1, name.length);
     }
 
     setColors(discoveries){
@@ -147,7 +165,7 @@ export default class MapComponent extends Component {
         let id = 0;
         for(let item of items){
             let type = {
-              id: id,
+              id: id.toString(),
               name: item
             };
             result.push(type);
@@ -180,7 +198,7 @@ export default class MapComponent extends Component {
                         region={this.state.initialPosition}
                         onPress={(event) => this.changeRegion(event)}>
                         {this.state.positions !== "" ? (this.state.positions.map((pos, index) =>
-                            <MapCircle key={index} center={{latitude: pos.position.latitude, longitude: pos.position.longitude}} radius={500} strokeColor={this.state.colors.get(pos.type.toLowerCase()).darkColor} strokeWidth={1} fillColor={this.state.colors.get(pos.type.toLowerCase()).lightColor} zIndex={4}/>
+                            <MapCircle key={index} center={{latitude: pos.position.latitude, longitude: pos.position.longitude}} radius={pos.degradation ? pos.degradation * 1000 : 500} strokeColor={this.state.colors.get(pos.type.toLowerCase()).darkColor} strokeWidth={1} fillColor={this.state.colors.get(pos.type.toLowerCase()).lightColor} zIndex={4}/>
                         )): null}
                         <MapView.Marker
                             title="Position actuelle"

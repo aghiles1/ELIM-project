@@ -16,7 +16,7 @@ class Home extends Component {
 	}
 
 	async goToDiscovery(event) {
-		this.props.navigation.navigate("Map");
+		this.props.navigation.navigate("Map", {userId: this.state.userId});
 	}
 
 	render() {

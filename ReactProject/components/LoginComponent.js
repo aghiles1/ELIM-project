@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, StyleSheet, Text, Image, KeyboardAvoidingView, View, TextInput, TouchableOpacity} from 'react-native';
+import {Button, StyleSheet, Text, Image, KeyboardAvoidingView, View, TextInput, TouchableOpacity, Alert} from 'react-native';
 import logoImg from '../assets/shroomGo.png';
 const IPAdress = require("../utils/ipAdress");
 
@@ -19,10 +19,8 @@ export default class LoginComponent extends Component {
         this.props.navigation.navigate("SignIn");
     }
     async goToHome(event) {
-        console.log("userName: ", this.state.userName);
         if(this.state.userName !== "") {
             let request = 'http://' + IPAdress.ipAdress + ':8080/ShroomGo/shroom/connexion?' + "userName="+ this.state.userName;
-            console.log("request ", request);
             fetch(request, {
                 method: 'GET'
             }).then((response)=>{
