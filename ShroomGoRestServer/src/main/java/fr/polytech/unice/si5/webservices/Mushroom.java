@@ -61,5 +61,17 @@ public class Mushroom {
         return null;
     }
 
+    @GET
+    @Path("/getUsers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> getUsers(){
+        try {
+            return dbh.getUsers();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
 

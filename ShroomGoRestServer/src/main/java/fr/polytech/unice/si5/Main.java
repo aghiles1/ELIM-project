@@ -66,12 +66,13 @@ public class Main {
     public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at %sapplication.wadl\nHit enter to stop it...", BASE_URI));
-        /*DBHelper db = new DBHelper();
+        DBHelper db = new DBHelper();
         try {
             System.out.println(db.getMushroomsPosSHared("43.71751987","6.8094635","25",2,MushroomType.names()).size());
+            System.out.println(db.getUsers());
         } catch (SQLException e) {
             e.printStackTrace();
-        }*/
+        }
         System.in.read();
         server.shutdown();
     }

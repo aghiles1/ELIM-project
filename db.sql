@@ -90,18 +90,18 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `mydb`;
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (1, 43.71751987, 6.8094635, 2, 'Bolet');
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (2, 43.79092385, 6.99485779, 2, 'Cepe');
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (3, 43.81353446, 6.97919369, 2, 'Bolet');
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (4, 43.81842714, 7.00065136, 2, 'Morille');
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (5, 43.80529652, 6.98477268, 2, 'Cepe');
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (6, 43.81130475, 6.97292805, 3, 'Bolet');
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (7, 43.8078981, 6.958251, 3, 'Morille');
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (8, 43.83254552, 6.98769093, 3, 'Cepe');
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (9, 43.67954265, 7.06448793, 2, 'Cepe');
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (10, 43.67969783, 7.06011057, 2, 'Morille');
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (11, 43.68106344, 7.06491709, 4, 'Bolet');
-INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (12, 43.67929435, 7.06161261, 4, 'Morille');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (1, 6.8094635, 43.71751987, 2, 'Bolet');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (2, 6.99485779, 43.79092385, 2, 'Cepe');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (3, 6.97919369, 43.81353446, 2, 'Bolet');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (4, 7.00065136, 43.81842714, 2, 'Morille');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (5, 6.98477268, 43.80529652, 2, 'Cepe');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (6, 6.97292805, 43.81130475, 3, 'Bolet');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (7, 6.958251, 43.8078981, 3, 'Morille');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (8, 6.98769093, 43.83254552, 3, 'Cepe');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (9, 7.06448793, 43.67954265, 2, 'Cepe');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (10, 7.06011057, 43.67969783, 2, 'Morille');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (11, 7.06491709, 43.68106344, 4, 'Bolet');
+INSERT INTO `mydb`.`mushroomPos` (`id`, `longitude`, `latitude`, `userid`, `type`) VALUES (12, 7.06161261, 43.67929435, 4, 'Morille');
 
 COMMIT;
 
