@@ -24,6 +24,8 @@ public class MockedDB {
     public void addFakePos() {
     }
     public List<MushroomFound> getMushroomsPos() {
+        List<MushroomFound> mushroomFounds = new ArrayList<>();
+        //mushroomFounds.add();
         return mushroomsPos;
     }
 
