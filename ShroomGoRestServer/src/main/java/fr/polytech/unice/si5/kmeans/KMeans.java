@@ -18,6 +18,8 @@ package fr.polytech.unice.si5.kmeans; /*****************************************
 
 // TODO: Give user option to define stopping criteria based on time elapsed
 
+import fr.polytech.unice.si5.entity.MockedDB;
+import fr.polytech.unice.si5.entity.MushroomFound;
 import fr.polytech.unice.si5.entity.Position;
 
 import java.io.IOException;
@@ -530,13 +532,49 @@ public class KMeans {
    }
 
 
+   public static List<List<MushroomFound>> getKmeans(List<MushroomFound> listMush){
+      int degradation = 1;
 
+      int numberMush = listMush.size();
+
+      double[][] points = new double[numberMush][3];
+      for (int i = 0; i < numberMush; i++) {
+         int deg = listMush.get(i).getDegradation();
+         points[i] = new double[]{listMush.get(i).getPosition().getLatitude(), listMush.get(i).getPosition().getLongitude(), listMush.get(i).getType().ordinal()};
+         if (degradation < deg) {
+            degradation = deg;
+
+         }
+      }
+      int k = (numberMush - 1)/degradation;
+      KMeans clustering = new KMeans.Builder(k, points)
+              .iterations(50)
+              .pp(true)
+              .epsilon(.001)
+              .useEpsilon(true)
+              .build();
+
+      double[][] centroids = clustering.getCentroids();
+      int[] assignment = clustering.getAssignment();
+
+      List<List<MushroomFound>> list = new ArrayList<List<MushroomFound>>();
+
+      for (int i = 0; i < k; i++)
+         list.add(new ArrayList());
+      for (int i = 0; i < assignment.length; i++)
+         list.get(assignment[i]).add(listMush.get(i));
+
+      for (int i = 0; i < k; i++)
+         for (int j = 0; j < list.get(i).size(); j++)
+            System.out.println(" "+ i + "lat : " + list.get(i).get(j).getPosition().getLatitude() + "  lng : " + list.get(i).get(j).getPosition().getLongitude());
+      return list;
+   }
    /***********************************************************************
     * Unit testing
     **********************************************************************/
    
    public static void main(String args[]) throws IOException {
-      int k = 3;
+   /*   int k = 3;
       double[][] points = {
               {43.741566, 7.336638, 0},
               {43.740698, 7.340842, 0},
@@ -573,7 +611,7 @@ public class KMeans {
                                     .epsilon(.001)
                                     .useEpsilon(true)
                                     .build();
-      
+
       double[][] centroids = clustering.getCentroids();
       int[] ass = clustering.getAssignment();
       List<List<Position>> list = new ArrayList<List<Position>>();
@@ -586,7 +624,10 @@ public class KMeans {
       for (int i = 0; i < k; i++)
          for (int j = 0; j < list.get(i).size(); j++)
             System.out.println(" "+ i + "lat : " + list.get(i).get(j).getLatitude() + "  lng : " + list.get(i).get(j).getLongitude());
-
+*/
+       getKmeans(new MockedDB().getMushroomsPos());
    }
+
+
 
 }
