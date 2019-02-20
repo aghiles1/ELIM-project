@@ -52,7 +52,7 @@ public class Mushroom {
     @GET
     @Path("/position")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<MushroomFound> getMushroomPosition(@QueryParam("centerLong") String centerLong,@QueryParam("centerLat") String centerLat,@QueryParam("size") String size, @QueryParam("userID") int userID,@QueryParam("array") List<String> array){
+    public List<Cluster> getMushroomPosition(@QueryParam("centerLong") String centerLong,@QueryParam("centerLat") String centerLat,@QueryParam("size") String size, @QueryParam("userID") int userID,@QueryParam("array") List<String> array){
         try {
             return dbh.getMushroomsPosSHared(centerLong,centerLat,size,userID,array);
         } catch (SQLException e) {

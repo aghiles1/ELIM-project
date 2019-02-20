@@ -1,5 +1,6 @@
 package fr.polytech.unice.si5.entity;
 
+import fr.polytech.unice.si5.kmeans.KMeans;
 import fr.polytech.unice.si5.webservices.Mushroom;
 
 import java.sql.*;
@@ -51,7 +52,7 @@ public class DBHelper {
         return resultSetToList(resultSet);
     }
 
-    public List<MushroomFound> getMushroomsPosSHared(String centerLong,String centerLat,String size,int userID,List<String> array) throws SQLException {
+    public List<Cluster> getMushroomsPosSHared(String centerLong,String centerLat,String size,int userID,List<String> array) throws SQLException {
         Statement statement = connect.createStatement();
         ResultSet resultSet = statement.executeQuery("select * from shared, mushroompos\n" +
                 "where shared.receiver = " + userID + " and shared.position = mushroompos.id and shared.sharer = mushroompos.userid;");
@@ -75,7 +76,8 @@ public class DBHelper {
             if(distance < radius && array.contains(mushroom.getType().toString()))
                 res.add(mushroom);
         }
-        return res;
+        System.out.println(res);
+        return KMeans.getKmeansByType(res);
     }
 
     private List<MushroomFound> resultSetToList(ResultSet resultSet) throws SQLException {
@@ -147,7 +149,4 @@ public class DBHelper {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return earthRadiusKm * c;
     }
-
-    //public void sharePosition()
-
 }

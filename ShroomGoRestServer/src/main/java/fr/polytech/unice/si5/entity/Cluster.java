@@ -53,4 +53,8 @@ public class Cluster {
         this.dominantType = dominantType;
     }
 
+    @Override
+    public String toString() {
+        return "rayon:" + rayon + ", position:" + mushPos.toString() + ", type:" +dominantType;
+    }
 }

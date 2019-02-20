@@ -40,7 +40,7 @@ Et normalement ca donne une requete qui a cette gueule : "127.0.0.1:8080/ShroomG
 public class Main {
 
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://192.168.43.136:8080/ShroomGo/";
+    public static final String BASE_URI = "http://localhost:8080/ShroomGo/";
     private static final String PACKAGE_WS = "fr.polytech.unice.si5.webservices";
 
     /**
@@ -71,13 +71,13 @@ public class Main {
         System.out.println(String.format("Jersey app started with WADL available at %sapplication.wadl\nHit enter to stop it...", BASE_URI));
         DBHelper db = new DBHelper();
         try {
-            //System.out.println(db.getMushroomsPosSHared("43.71751987","6.8094635","25",2,MushroomType.names()).size());
-            //System.out.println(db.getUsers());
-            List<String> lst = new ArrayList<>();
+            System.out.println(db.getMushroomsPosSHared("6.97292805","43.81130475","50",2,MushroomType.names()));
+            System.out.println(db.getUsers());
+            /*List<String> lst = new ArrayList<>();
             lst.add("3");
             lst.add("4");
             int res = db.addPosition(new MushroomFound(MushroomType.Cepe,new Position(43.71751987,6.8094635),1));
-            db.sharePosition(2,res,lst);
+            db.sharePosition(1,res,lst);*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
