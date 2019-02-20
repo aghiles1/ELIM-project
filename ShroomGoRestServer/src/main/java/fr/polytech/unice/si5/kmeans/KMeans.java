@@ -577,7 +577,7 @@ public class KMeans {
     * @param listMush
     * @return
     */
-   public static List<Cluster> getKmeansType(List<MushroomFound> listMush){
+   public static List<Cluster> getKmeansByType(List<MushroomFound> listMush){
       int degradation = 1;
       double[] map = {0., 0., 0., 0.};
       int numberMush = listMush.size();
@@ -654,72 +654,5 @@ public class KMeans {
    public static double degreesToRadians(Double degrees) {
       return degrees * Math.PI / 180;
    }
-
-   /***********************************************************************
-    * Unit testing
-    **********************************************************************/
    
-   public static void main(String args[]) throws IOException {
-   /*   int k = 3;
-      double[][] points = {
-              {43.741566, 7.336638, 0},
-              {43.740698, 7.340842, 0},
-              {43.744108, 7.335008, 1},
-              {43.745100, 7.342086, 1},
-              {43.741684, 7.342950, 1},
-              {43.741358, 7.335593, 2},
-              {43.743807, 7.333287, 2},
-              {43.743053, 7.337476, 2},
-
-              {43.740741, 7.022455, 0},
-              {43.739687, 7.015506, 2},
-              {43.737454, 7.034209, 0},
-              {43.739954, 7.020924, 0},
-              {43.734558, 7.024227, 2},
-              {43.740729, 7.026414, 1},
-              {43.735985, 7.024098, 1},
-              {43.742874, 7.030963, 1},
-              {43.734937, 7.020153, 1},
-
-              {43.925618, 7.349110, 0},
-              {43.927040, 7.358461, 1},
-              {43.926175, 7.369100, 0},
-              {43.924197, 7.353056, 0},
-              {43.916901, 7.350740, 1},
-              {43.917581, 7.361893, 1},
-              {43.931738, 7.339415, 1},
-              {43.932814, 7.353167, 2},
-              {43.924530, 7.359000, 2}
-      };
-      KMeans clustering = new KMeans.Builder(k, points)
-                                    .iterations(50)
-                                    .pp(true)
-                                    .epsilon(.001)
-                                    .useEpsilon(true)
-                                    .build();
-
-      double[][] centroids = clustering.getCentroids();
-      int[] ass = clustering.getAssignment();
-      List<List<Position>> list = new ArrayList<List<Position>>();
-
-     for (int i = 0; i < k; i++)
-         list.add(new ArrayList());
-      for (int i = 0; i < ass.length; i++)
-         list.get(ass[i]).add(new Position(points[i][1],points[i][0]));
-
-      for (int i = 0; i < k; i++)
-         for (int j = 0; j < list.get(i).size(); j++)
-            System.out.println(" "+ i + "lat : " + list.get(i).get(j).getLatitude() + "  lng : " + list.get(i).get(j).getLongitude());
-*/
-       List<Cluster> s = getKmeansType(new MockedDB().getMushroomsPos());
-       for (int i =0; i<s.size(); i++) {
-          System.out.println("pos: "+s.get(i).getMushPos() + " type dominant : " + s.get(i).getDominantType() + " rayon : " + s.get(i).getRayon());
-          for(Map.Entry<MushroomType, Double> entry : s.get(i).getPourcentage().entrySet()) {
-             System.out.println("\t\t type : " + entry.getKey() + " % " + entry.getValue());
-          }
-       }
-   }
-
-
-
 }
