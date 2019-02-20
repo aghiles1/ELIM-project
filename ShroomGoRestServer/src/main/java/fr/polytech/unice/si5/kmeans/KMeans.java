@@ -18,9 +18,7 @@ package fr.polytech.unice.si5.kmeans; /*****************************************
 
 // TODO: Give user option to define stopping criteria based on time elapsed
 
-import fr.polytech.unice.si5.entity.MockedDB;
-import fr.polytech.unice.si5.entity.MushroomFound;
-import fr.polytech.unice.si5.entity.Position;
+import fr.polytech.unice.si5.entity.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -531,7 +529,11 @@ public class KMeans {
       return "KMeans++ took: " + (double) (end - start) / 1000.0 + " seconds";
    }
 
-
+   /**
+    * Renvoie les points presents dans les clusters
+    * @param listMush
+    * @return
+    */
    public static List<List<MushroomFound>> getKmeans(List<MushroomFound> listMush){
       int degradation = 1;
 
@@ -566,9 +568,93 @@ public class KMeans {
 
       for (int i = 0; i < k; i++)
          for (int j = 0; j < list.get(i).size(); j++)
-            System.out.println(" "+ i + "lat : " + list.get(i).get(j).getPosition().getLatitude() + "  lng : " + list.get(i).get(j).getPosition().getLongitude());
+            System.out.println(" "+ i + " lat : " + list.get(i).get(j).getPosition().getLatitude() + "  lng : " + list.get(i).get(j).getPosition().getLongitude());
       return list;
    }
+
+   /**
+    * si le cluster est un point le rayon == 0
+    * @param listMush
+    * @return
+    */
+   public static List<Cluster> getKmeansType(List<MushroomFound> listMush){
+      int degradation = 1;
+      double[] map = {0., 0., 0., 0.};
+      int numberMush = listMush.size();
+
+      double[][] points = new double[numberMush][3];
+      for (int i = 0; i < numberMush; i++) {
+         int deg = listMush.get(i).getDegradation();
+         points[i] = new double[]{listMush.get(i).getPosition().getLatitude(), listMush.get(i).getPosition().getLongitude(), listMush.get(i).getType().ordinal()};
+         if (degradation < deg) {
+            degradation = deg;
+
+         }
+      }
+      int k = (numberMush - 1)/degradation;
+      KMeans clustering = new KMeans.Builder(k, points)
+              .iterations(50)
+              .pp(true)
+              .epsilon(.001)
+              .useEpsilon(true)
+              .build();
+
+      double[][] centroids = clustering.getCentroids();
+      int[] assignment = clustering.getAssignment();
+
+      List<List<MushroomFound>> list = new ArrayList<List<MushroomFound>>();
+      for (int i = 0; i < k; i++)
+         list.add(new ArrayList());
+      for (int i = 0; i < assignment.length; i++)
+         list.get(assignment[i]).add(listMush.get(i));
+      List<Cluster> clusters = new ArrayList<Cluster>();
+      for (int i = 0; i < k; i++) {
+         double dist = 0.;
+         map = new double[]{0., 0., 0., 0.};
+         List<MushroomFound> l = list.get(i);
+         for (int j = 0; j < l.size(); j++) {
+            map[l.get(j).getType().ordinal()]++;
+            double distance = distanceInKmBetweenEarthCoordinates(new Position(centroids[i][1],centroids[i][0]),l.get(j).getPosition());
+            if (dist < distance) {
+               dist = distance;
+            }
+         }
+         HashMap m = new HashMap<MushroomType,Double>();
+         double per = 0.;
+         MushroomType type = null;
+         for (int h = 0; h < 4; h++) {
+            if (per < map[h]) {
+               per = map[h];
+               type = MushroomType.getType(h);
+            }
+            m.put(MushroomType.getType(h), (map[h]/(double) l.size())*100);
+         }
+
+         clusters.add(new Cluster(dist, new Position(centroids[i][1], centroids[i][0]), m, type));
+      }
+
+      return clusters;
+   }
+
+   public static double distanceInKmBetweenEarthCoordinates(Position pos1, Position pos2){
+      int earthRadiusKm = 6371;
+
+      double dLat = degreesToRadians(pos2.getLatitude()-pos1.getLatitude());
+      double dLon = degreesToRadians(pos2.getLongitude()-pos1.getLongitude());
+
+      double lat1d = degreesToRadians(pos1.getLatitude());
+      double lat2d = degreesToRadians(pos2.getLatitude());
+
+      double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1d) * Math.cos(lat2d);
+      double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return earthRadiusKm * c;
+   }
+
+   public static double degreesToRadians(Double degrees) {
+      return degrees * Math.PI / 180;
+   }
+
    /***********************************************************************
     * Unit testing
     **********************************************************************/
@@ -625,7 +711,13 @@ public class KMeans {
          for (int j = 0; j < list.get(i).size(); j++)
             System.out.println(" "+ i + "lat : " + list.get(i).get(j).getLatitude() + "  lng : " + list.get(i).get(j).getLongitude());
 */
-       getKmeans(new MockedDB().getMushroomsPos());
+       List<Cluster> s = getKmeansType(new MockedDB().getMushroomsPos());
+       for (int i =0; i<s.size(); i++) {
+          System.out.println("pos: "+s.get(i).getMushPos() + " type dominant : " + s.get(i).getDominantType() + " rayon : " + s.get(i).getRayon());
+          for(Map.Entry<MushroomType, Double> entry : s.get(i).getPourcentage().entrySet()) {
+             System.out.println("\t\t type : " + entry.getKey() + " % " + entry.getValue());
+          }
+       }
    }
 
 

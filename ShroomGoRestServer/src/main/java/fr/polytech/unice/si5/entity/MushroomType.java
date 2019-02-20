@@ -20,4 +20,15 @@ public enum MushroomType {
 
         return names;
     }
+
+    public static MushroomType getType(int val) {
+        switch (val) {
+            case 0: return Bolet;
+            case 1: return Cepe;
+            case 2: return Chanterelle;
+            case 3: return Morille;
+            default: return null;
+        }
+
+    }
 }
