@@ -9,16 +9,21 @@ export default class AddDiscoveryComponent extends Component {
         super(props);
         this.state = {
             selectedMushroomType: [],
+            selectedFriends: [],
             availableMushroomTypes: [{id:"0", name: "Morille"}, {id:"1", name: "Bolet"}, {id:"2", name: "Cepe"}, {id:"3", name: "Chanterelle"}],
             userId: this.props.navigation.getParam("userId"),
             latitude: 0,
-            longitude: 0
+            longitude: 0,
+            friends: []
         }
     }
 
     onSelectedItemsChange(newType) {
-        console.log("newType: ", newType);
         this.setState({selectedMushroomType: newType});
+    }
+
+    onSelectedFriendChange(newFriend) {
+        this.setState({selectedFriends: newFriend});
     }
 
     componentDidMount() {
@@ -38,11 +43,25 @@ export default class AddDiscoveryComponent extends Component {
             },
             {enableHighAccuracy: true, maximumAge: 0, distanceFilter: 1},
         );
+
+        let request = 'http://' + IPAdress.ipAdress +':8080/ShroomGo/shroom/getUsers';
+        fetch(request, {
+            method: 'GET'
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    friends: responseJson
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     shareDiscovery(){
         if(this.state.selectedMushroomType !== ""){
-            let request = 'http:' + IPAdress.ipAdress + ':8080/ShroomGo/shroom/add?' + "type=" + this.state.availableMushroomTypes[this.state.selectedMushroomType[0]].name + "&userID="+ this.state.userId + "&longitude=" + this.state.longitude + "&latitude=" + this.state.latitude;
+            let request = 'http:' + IPAdress.ipAdress + ':8080/ShroomGo/shroom/add?' + "type=" + this.state.availableMushroomTypes[this.state.selectedMushroomType[0]].name + "&userID="+ this.state.userId + "&longitude=" + this.state.longitude + "&latitude=" + this.state.latitude + this.friends();
             fetch(request, {
                 method: 'POST',
                 headers: {
@@ -59,6 +78,17 @@ export default class AddDiscoveryComponent extends Component {
                 console.error(error);
             });
         }
+        else {
+            Alert.alert("Choisissez un type de champignon")
+        }
+    }
+
+    friends() {
+        let result = "";
+        for(let selectedFriend in this.state.selectedFriends) {
+            result += "&users=" + this.state.friends[selectedFriend].id
+        }
+        return result;
     }
 
     render() {
@@ -72,7 +102,28 @@ export default class AddDiscoveryComponent extends Component {
                     uniqueKey="id"
                     onSelectedItemsChange={this.onSelectedItemsChange.bind(this)}
                     selectedItems={this.state.selectedMushroomType}
-                    selectText="Pick Items"
+                    selectText="Choisir un type de champignon"
+                    searchInputPlaceholderText="Search Items..."
+                    tagRemoveIconColor="green"
+                    tagBorderColor="green"
+                    tagTextColor="green"
+                    selectedItemTextColor="green"
+                    selectedItemIconColor="green"
+                    itemTextColor="green"
+                    displayKey="name"
+                    searchInputStyle={{ color: 'green' }}
+                    itemStyle={{backgroundColor: 'rgba(255,255,255,0.2)'}}
+                    submitButtonColor="green"
+                    submitButtonText="Choisir"
+                />
+                <MultiSelect
+                    style={styles.picker1}
+                    single
+                    items={this.state.friends}
+                    uniqueKey="id"
+                    onSelectedItemsChange={this.onSelectedFriendChange.bind(this)}
+                    selectedItems={this.state.selectedFriends}
+                    selectText="Choisissez à qui vous partagez cette découverte"
                     searchInputPlaceholderText="Search Items..."
                     tagRemoveIconColor="green"
                     tagBorderColor="green"
